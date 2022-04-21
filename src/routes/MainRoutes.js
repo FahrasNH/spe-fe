@@ -1,9 +1,11 @@
+import Terminal from '../pages/Terminal'
+
 const routeList = [
   {
-    name: 'Default',
-    path: '/default',
+    name: 'Terminal',
+    path: '/',
     exact: false,
-    component: 'Not found',
+    component: <Terminal />,
     permission: true,
   },
 ]

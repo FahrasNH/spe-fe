@@ -2,7 +2,11 @@ module.exports = {
   mode: 'jit',
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        orbitron: ['Orbitron', 'sans-serif'],
+      },
+    },
     screens: {
       mobile: { min: '320px', max: '639px' },
       tab: { min: '640px', max: '769px' },
