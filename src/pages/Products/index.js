@@ -4,7 +4,8 @@ import { Image, Input, Text, View } from '../../components/atoms'
 
 const Products = () => {
   const [products, setProducts] = useState([])
-  const [subTotal, setSubTotal] = useState([])
+  const [price, setPrice] = useState([])
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
     const config = {
@@ -14,17 +15,25 @@ const Products = () => {
       },
     }
 
-    async function fetchData() {
+    const fetchData = async () => {
       const { data } = await axios.get(
         ` https://spe-academy.spesolution.net/api/recruitment`,
         config,
       )
 
       data.forEach((sub) => {
-        setSubTotal((oldArray) => [...oldArray, sub.product.price])
+        setPrice((oldArray) => [...oldArray, sub.product.price])
       })
 
-      setProducts(data)
+      const subTotal = data.map((el) => {
+        let subTotalPrice = Object.assign({}, el)
+        subTotalPrice.product.totalPrice = 0
+        subTotalPrice.quantity = 0
+
+        return subTotalPrice
+      })
+
+      setProducts(subTotal)
     }
     fetchData()
   }, [])
@@ -48,10 +57,15 @@ const Products = () => {
                     const handleQuantity = (value) => {
                       const newProducts = products.map((item) => ({ ...item }))
 
-                      newProducts[idx].quantity = Number(value || 0)
-                      newProducts[idx].product.price =
-                        Number(value || 0) * subTotal[idx]
+                      newProducts[idx].quantity = Number(value) || 0
+                      newProducts[idx].product.totalPrice =
+                        Number(value || 0) * price[idx]
 
+                      const newTotal = newProducts
+                        .map((amount) => amount.product.totalPrice)
+                        .reduce((prodA, prodB) => prodA + prodB)
+
+                      setTotal(newTotal)
                       setProducts(newProducts)
                     }
 
@@ -75,9 +89,7 @@ const Products = () => {
                               </Text>
                               <Text className="text-[#ADACAE] text-[16px]">
                                 IDR.{' '}
-                                {Intl.NumberFormat('id-ID').format(
-                                  subTotal[idx],
-                                )}
+                                {Intl.NumberFormat('id-ID').format(price[idx])}
                               </Text>
                               <Text className="text-[#D0676E] text-[14px]">
                                 {product.product.stock} in stock
@@ -87,9 +99,11 @@ const Products = () => {
                         </td>
                         <td className="p-4 text-center">
                           <Input
-                            value={product.product.quantity}
+                            value={product.quantity}
                             name="quantity"
                             type="number"
+                            min="0"
+                            max={`${product.product.stock}`}
                             className="w-[100px]"
                             onChange={(e) => handleQuantity(e.target.value)}
                           />
@@ -98,7 +112,7 @@ const Products = () => {
                           <Text>
                             IDR.{' '}
                             {Intl.NumberFormat('id-ID').format(
-                              product.product.price,
+                              product.product.totalPrice,
                             )}
                           </Text>
                         </td>
@@ -111,7 +125,7 @@ const Products = () => {
           <View className="bg-[#111111] text-white p-[12px] flex justify-end">
             <Text className="font-bold text-[20px]">Total</Text>
             <Text className="font-bold text-[20px] w-[250px] text-right">
-              IDR. {Intl.NumberFormat('id-ID').format(0)}
+              IDR. {Intl.NumberFormat('id-ID').format(total)}
             </Text>
           </View>
         </View>

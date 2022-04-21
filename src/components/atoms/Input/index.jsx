@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react'
 
 const Input = ({
+  min,
+  max,
   type,
   label,
   value,
@@ -21,6 +23,8 @@ const Input = ({
       )}
       <input
         type={type}
+        min={min}
+        max={max}
         value={value}
         disabled={disabled}
         onChange={onChange}
