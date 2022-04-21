@@ -1,4 +1,5 @@
 import View from './View'
 import Text from './Text'
+import Image from './Image'
 
-export { View, Text }
+export { View, Text, Image }

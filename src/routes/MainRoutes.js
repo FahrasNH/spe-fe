@@ -1,3 +1,4 @@
+import Products from '../pages/Products'
 import Terminal from '../pages/Terminal'
 
 const routeList = [
@@ -6,6 +7,13 @@ const routeList = [
     path: '/',
     exact: false,
     component: <Terminal />,
+    permission: true,
+  },
+  {
+    name: 'Products',
+    path: '/product',
+    exact: false,
+    component: <Products />,
     permission: true,
   },
 ]

@@ -12,12 +12,7 @@ function App() {
             <Route
               path={el.path}
               exact={el.exact}
-              element={
-                <Fragment>
-                  {/* {el.permission && <Navbar />} */}
-                  {el.component}
-                </Fragment>
-              }
+              element={<Fragment>{el.component}</Fragment>}
               key={index}
             />
           ))}
